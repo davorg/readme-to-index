@@ -36,5 +36,5 @@ jobs:
         with:
           path: _site
 
-      - id: deployment
+      - name: Deploy
         uses: actions/deploy-pages@v3
