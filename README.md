@@ -1,5 +1,8 @@
 # readme-to-index
 
+[![GitHub Marketplace](https://img.shields.io/badge/Marketplace-readme--to--index.html-blue?logo=github)](https://github.com/marketplace/actions/readme-to-index-html)
+[![Release](https://img.shields.io/github/v/release/davorg/readme-to-index)](https://github.com/davorg/readme-to-index/releases)
+
 Generate a styled `index.html` from a `README.md` using Pandoc and Simple.css.
 
 This GitHub Action turns a standard project README into a clean, minimal
