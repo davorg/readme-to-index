@@ -1,5 +1,9 @@
-name: "README → index.html (Pandoc + Simple.css)"
-description: "Generate a styled index.html from a README.md using Pandoc and Simple.css, setting the HTML <title> from the first H1."
+name: "README to index.html"
+description: "Turn your README.md into a clean, styled GitHub Pages site using Pandoc and Simple.css — no Jekyll required."
+author: Dave Cross (davorg)
+branding:
+  icon: "book-open"
+  color: "blue"
 inputs:
   readme:
     description: "Path to the Markdown source file"
@@ -47,7 +51,7 @@ runs:
           exit 1
         fi
 
-        mkdir `dirname "$output"`
+        mkdir -p $(dirname "$output")
 
         # Extract first H1 (“# Title”) for the HTML <title>.
         # If not found, fall back to the README filename.
