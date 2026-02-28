@@ -47,6 +47,8 @@ runs:
           exit 1
         fi
 
+        mkdir `dirname "$output"`
+
         # Extract first H1 (“# Title”) for the HTML <title>.
         # If not found, fall back to the README filename.
         pagetitle="$(sed -n 's/^# \{1,\}//p;q' "$readme" || true)"
