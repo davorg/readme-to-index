@@ -1,0 +1,64 @@
+name: "README → index.html (Pandoc + Simple.css)"
+description: "Generate a styled index.html from a README.md using Pandoc and Simple.css, setting the HTML <title> from the first H1."
+inputs:
+  readme:
+    description: "Path to the Markdown source file"
+    required: false
+    default: "README.md"
+  output:
+    description: "Path to the generated HTML file"
+    required: false
+    default: "index.html"
+  css_url:
+    description: "CSS URL to link in the generated HTML"
+    required: false
+    default: "https://cdn.simplecss.org/simple.min.css"
+  install_pandoc:
+    description: "Whether to install pandoc via apt-get (true/false)"
+    required: false
+    default: "true"
+  extra_pandoc_args:
+    description: "Extra args passed to pandoc (space-separated)"
+    required: false
+    default: ""
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install pandoc
+      if: ${{ inputs.install_pandoc == 'true' }}
+      shell: bash
+      run: |
+        set -euo pipefail
+        sudo apt-get update
+        sudo apt-get install -y pandoc
+
+    - name: Build HTML from README
+      shell: bash
+      run: |
+        set -euo pipefail
+
+        readme="${{ inputs.readme }}"
+        output="${{ inputs.output }}"
+        css_url="${{ inputs.css_url }}"
+
+        if [[ ! -f "$readme" ]]; then
+          echo "ERROR: README file not found: $readme" >&2
+          exit 1
+        fi
+
+        # Extract first H1 (“# Title”) for the HTML <title>.
+        # If not found, fall back to the README filename.
+        pagetitle="$(sed -n 's/^# \{1,\}//p;q' "$readme" || true)"
+        if [[ -z "${pagetitle}" ]]; then
+          pagetitle="$(basename "$readme")"
+        fi
+
+        # shellcheck disable=SC2086
+        pandoc -s --no-highlight \
+          --css "$css_url" \
+          --metadata "pagetitle=$pagetitle" \
+          ${{ inputs.extra_pandoc_args }} \
+          "$readme" -o "$output"
+
+        echo "Generated: $output"
