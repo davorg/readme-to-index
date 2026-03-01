@@ -34,8 +34,24 @@ runs:
       shell: bash
       run: |
         set -euo pipefail
-        sudo apt-get update
-        sudo apt-get install -y pandoc
+
+        if command -v pandoc >/dev/null 2>&1; then
+          echo "pandoc already installed"
+          exit 0
+        fi
+
+        if ! command -v apt-get >/dev/null 2>&1; then
+          echo "ERROR: pandoc not found and apt-get is not available. Install pandoc in your job image, or set install_pandoc: false and install it yourself." >&2
+          exit 1
+        fi
+
+        if command -v sudo >/dev/null 2>&1; then
+          sudo apt-get update
+          sudo apt-get install -y pandoc
+        else
+          apt-get update
+          apt-get install -y pandoc
+        fi
 
     - name: Build HTML from README
       shell: bash
@@ -51,7 +67,7 @@ runs:
           exit 1
         fi
 
-        mkdir -p $(dirname "$output")
+        mkdir -p "$(dirname "$output")"
 
         # Extract first H1 (“# Title”) for the HTML <title>.
         # If not found, fall back to the README filename.
