@@ -116,3 +116,23 @@ With custom inputs:
 To publish via GitHub Pages using the modern deployment flow, see the example
 workflow in this repository.
 
+## Installing Pandoc
+
+This Action relies on Pandoc. So we need to ensure that Pandoc is installed.
+
+If you're running on a Ubuntu runner or in a Docker container that is based
+on Ubuntu or some other Debian derivative, than that's easy enough. We just
+run `apt-get install pandoc`.
+
+But if you're running in some other environment, it's not so easy. And,
+instead of trying to handle all possible installation scenarios, we ignore
+the problem and pass it to you.
+
+You have two options:
+
+* Run your workflow on a Docker container which has Pandoc installed
+* Install Pandoc on your runner before the `readme-to-index` step
+
+In both cases, you should set the `install_pandoc` input to "false" so
+we don't try (and probably fail!) to install Pandoc.
+
