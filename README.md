@@ -118,7 +118,8 @@ workflow in this repository.
 
 ## Installing Pandoc
 
-This Action relies on Pandoc. So we need to ensure that Pandoc is installed.
+This Action relies on Pandoc. So we need to ensure that Pandoc is installed
+in the environment where the Action runs.
 
 If you're running on a Ubuntu runner or in a Docker container that is based
 on Ubuntu or some other Debian derivative, than that's easy enough. We just
