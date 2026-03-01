@@ -34,7 +34,7 @@ That’s it.
 For small libraries, CPAN distributions, and utility projects, that’s often
 exactly what you want.
 
-### 2. Easy to Insert Into a Build Pipeline
+### 2. Easy to insert into a build bipeline
 
 This approach works anywhere Pandoc runs:
 
@@ -49,7 +49,7 @@ It’s just a build step.
 
 ---
 
-## What It Does
+## What it does
 
 * Converts `README.md` → `index.html`
 * Applies Simple.css for clean, classless styling
@@ -95,7 +95,7 @@ Additional arguments passed directly to the Pandoc command.
 
 ---
 
-## Example Usage
+## Example usage
 
 Minimal usage:
 
@@ -136,4 +136,14 @@ You have two options:
 
 In both cases, you should set the `install_pandoc` input to "false" so
 we don't try (and probably fail!) to install Pandoc.
+
+# Questions, bugs and suggestions
+
+The code for this Action lives on GitHub.
+
+* https://github.com/davorg/readme-to-index
+
+Please use the issue tracker to raise any questions you might have.
+
+* https://github.com/davorg/readme-to-index/issues
 
