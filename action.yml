@@ -25,6 +25,10 @@ inputs:
     description: "Extra args passed to pandoc (space-separated)"
     required: false
     default: ""
+  google_analytics:
+    description: "GA4 measurement ID (e.g. G-XXXXXXXXXX). If set, the standard GA4 snippet is injected into the generated HTML."
+    required: false
+    default: ""
 
 runs:
   using: "composite"
@@ -84,3 +88,41 @@ runs:
           "$readme" -o "$output"
 
         echo "Generated: $output"
+
+    - name: Inject Google Analytics
+      if: ${{ inputs.google_analytics != '' }}
+      shell: bash
+      env:
+        GA_ID: ${{ inputs.google_analytics }}
+        OUTPUT: ${{ inputs.output }}
+      run: |
+        set -euo pipefail
+
+        python3 - "$OUTPUT" "$GA_ID" <<'PYEOF'
+        import sys
+        import re
+
+        output_file = sys.argv[1]
+        ga_id = sys.argv[2]
+
+        ga_snippet = (
+            "<!-- Google tag (gtag.js) -->\n"
+            f'<script async src="https://www.googletagmanager.com/gtag/js?id={ga_id}"></script>\n'
+            "<script>\n"
+            "  window.dataLayer = window.dataLayer || [];\n"
+            "  function gtag(){dataLayer.push(arguments);}\n"
+            "  gtag('js', new Date());\n"
+            f"  gtag('config', '{ga_id}');\n"
+            "</script>\n"
+        )
+
+        with open(output_file, 'r') as f:
+            html = f.read()
+
+        html = re.sub(r'<head>', '<head>\n' + ga_snippet, html, count=1, flags=re.IGNORECASE)
+
+        with open(output_file, 'w') as f:
+            f.write(html)
+        PYEOF
+
+        echo "Google Analytics (${GA_ID}) injected into: ${OUTPUT}"
