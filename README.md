@@ -93,6 +93,13 @@ Additional arguments passed directly to the Pandoc command.
 
 **Default:** *(empty)*
 
+### `google_analytics`
+
+A GA4 measurement ID (e.g. `G-XXXXXXXXXX`). When set, the standard GA4 gtag
+snippet is injected into the generated HTML immediately after the `<head>` tag.
+
+**Default:** *(empty — no analytics code added)*
+
 ---
 
 ## Example usage
@@ -111,6 +118,14 @@ With custom inputs:
     readme: docs/README.md
     output: _site/index.html
     extra_pandoc_args: "--toc"
+```
+
+With Google Analytics:
+
+```yaml
+- uses: davorg/readme-to-index@v1
+  with:
+    google_analytics: "G-XXXXXXXXXX"
 ```
 
 To publish via GitHub Pages using the modern deployment flow, see the example
